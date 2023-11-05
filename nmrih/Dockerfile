@@ -24,13 +24,13 @@ USER $USER
 RUN \
     steamcmd +force_install_dir $HOME +login anonymous +app_update $APPID validate +quit
 
+# Copy resources
 RUN mkdir $HOME/.resources
-COPY --chown=$UID:$GID ./fastdl/ $HOME/.resources
-RUN \
-    rm -f $HOME/.resources/Dockerfile \
-    && rm -f $HOME/.resources/nginx.conf \
+COPY --chown=$UID:$GID ./fastdl/resources/ $HOME/.resources
+RUN rm -f $HOME/.resources/*.txt \
     && for d in $HOME/.resources/*; do cp -r "$d"/* $HOME/nmrih/; done
 
+# Copy server.cfg and init.sh
 COPY --chown=$UID:$GID ./server.cfg $HOME/nmrih/cfg/
 COPY --chown=$UID:$GID ./init.sh $HOME/
 RUN chmod +x $HOME/init.sh

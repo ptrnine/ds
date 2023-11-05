@@ -15,17 +15,12 @@ services:
       - log:/log
     env_file: .env
 
-  fastdl:
+  nmrih-fastdl:
     build: nmrih/fastdl
     ports:
       - 6996:6996
-    configs:
-      - source: fastdl-nginx-conf
-        target: /etc/nginx/nginx.conf
+    volumes:
+      - ${PWD}/nmrih/fastdl/nginx.conf:/etc/nginx/nginx.conf
 
 volumes:
   log:
-
-configs:
-  fastdl-nginx-conf:
-    file: ./nmrih/fastdl/nginx.conf

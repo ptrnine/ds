@@ -15,9 +15,8 @@ RUN \
     && rm -f /etc/nginx/sites-enabled/default
 
 WORKDIR $HOME
-COPY . $HOME/.content
 
-RUN \
-    rm -f $HOME/.content/Dockerfile \
-    && rm -f $HOME/.content/nginx.conf \
-    && for d in $HOME/.content/*; do mv "$d"/* .; done
+# Copy resources
+COPY resources/* $HOME/.resources
+RUN rm -f $HOME/.resources/*.txt \
+    && for d in $HOME/.resources/*; do mv "$d"/* .; done
