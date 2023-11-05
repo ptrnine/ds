@@ -1,9 +1,9 @@
 from steamcmd/steamcmd:ubuntu-22
 
-ENV UID=500
-ENV GID=500
-ENV APPID=317670
+ARG UID=500
+ARG GID=500
 
+ENV APPID=317670
 ENV USER=nmrihds
 ENV HOME=/home/nmrihds
 
@@ -31,8 +31,8 @@ RUN \
     && rm -f $HOME/.resources/nginx.conf \
     && for d in $HOME/.resources/*; do cp -r "$d"/* $HOME/nmrih/; done
 
+COPY --chown=$UID:$GID ./server.cfg $HOME/nmrih/cfg/
 COPY --chown=$UID:$GID ./init.sh $HOME/
-RUN chmod +x ./init.sh
+RUN chmod +x $HOME/init.sh
 
-CMD []
 ENTRYPOINT []
