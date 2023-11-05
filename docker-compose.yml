@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  nmrih:
+    environment:
+      - LD_LIBRARY_PATH=".:bin:"
+    build: nmrih
+    restart: unless-stopped
+    command: sh -c "/home/nmrihds/init.sh && exec ./srcds_linux -consolelog=/log/nmrih.log -game nmrih -maxplayer 8 +map nmo_broadway"
+    stdin_open: true
+    tty: true
+    ports:
+      - 27015:27015
+    configs:
+      - source: server.cfg
+        target: /home/nmrihds/nmrih/cfg/server.cfg
+    volumes:
+      - log:/log
+
+  fastdl:
+    build: nmrih/fastdl
+    ports:
+      - 6996:6996
+    configs:
+      - source: fastdl-nginx-conf
+        target: /etc/nginx/nginx.conf
+
+volumes:
+  log:
+
+configs:
+  server.cfg:
+    file: ./nmrih/server.cfg
+  fastdl-nginx-conf:
+    file: ./nmrih/fastdl/nginx.conf

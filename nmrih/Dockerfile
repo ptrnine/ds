@@ -1,0 +1,38 @@
+from steamcmd/steamcmd:ubuntu-22
+
+ENV UID=500
+ENV GID=500
+ENV APPID=317670
+
+ENV USER=nmrihds
+ENV HOME=/home/nmrihds
+
+RUN \
+    groupadd -g $GID -o $USER \
+    && useradd -m -u $UID -g $GID -o -s /bin/bash $USER \
+    && mkdir -p $HOME \
+    && mkdir -p /log \
+    && chown -R $UID:$GID /log
+
+WORKDIR $HOME
+RUN \
+    cp -L -r /root/.steam $HOME \
+    && chown -R $UID:$GID $HOME
+
+USER $USER
+
+RUN \
+    steamcmd +force_install_dir $HOME +login anonymous +app_update $APPID validate +quit
+
+RUN mkdir $HOME/.resources
+COPY --chown=$UID:$GID ./fastdl/ $HOME/.resources
+RUN \
+    rm -f $HOME/.resources/Dockerfile \
+    && rm -f $HOME/.resources/nginx.conf \
+    && for d in $HOME/.resources/*; do cp -r "$d"/* $HOME/nmrih/; done
+
+COPY --chown=$UID:$GID ./init.sh $HOME/
+RUN chmod +x ./init.sh
+
+CMD []
+ENTRYPOINT []
