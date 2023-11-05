@@ -13,6 +13,7 @@ RUN \
     && mkdir -p /log \
     && chown -R $UID:$GID /log \
     && rm -f /etc/nginx/sites-enabled/default \
+    && rm -f /etc/nginx/sites-available/default \
     && apt-get update && yes | apt-get install bzip2
 
 WORKDIR $HOME

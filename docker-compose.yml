@@ -18,7 +18,7 @@ services:
   nmrih-fastdl:
     build: nmrih/fastdl
     ports:
-      - 6996:6996
+      - ${NMRIH_FASTDL_PORT}:1337
     volumes:
       - ${PWD}/nmrih/fastdl/nginx.conf:/etc/nginx/nginx.conf
 
